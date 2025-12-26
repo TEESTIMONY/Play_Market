@@ -145,7 +145,7 @@ const AuctionPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
 
         {/* Latest Bid */}
         <div className="bg-gradient-to-r from-white to-gray-50 p-5 rounded-xl mb-6 w-full max-w-md text-center shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-200">
-          <p className="font-body text-black text-lg">Latest Bid: <span className="text-yellow font-bold text-xl animate-bounce">{latestBid} <FaCoins className="inline text-yellow-500" /></span></p>
+          <p className="font-body text-black text-lg">Latest Bid: <span className="text-yellow font-bold text-xl animate-bounce">{latestBid} <FaCoins className="inline text-yellow-400" /></span></p>
         </div>
 
         {/* Place a Bid Button */}
