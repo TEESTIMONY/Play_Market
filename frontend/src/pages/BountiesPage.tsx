@@ -226,10 +226,10 @@ const BountiesPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
       <Header currentPage={currentPage} onPageChange={onPageChange} />
 
       {/* Campaign Banner */}
-      <div className="bg-red-500 text-white py-2 px-4 shadow-lg animate-pulse border-2 border-red-700">
+      <div className="bg-red text-white py-2 px-4 shadow-lg animate-pulse border-2 border-red-700">
         <div className="flex items-center justify-center max-w-4xl mx-auto">
           <div className="text-center">
-            <span className="text-lg mb-1 block">🎯</span>
+            {/* <span className="text-lg mb-1 block">🎯</span> */}
             <p className="font-heading text-sm font-bold">Complete Tasks & Earn Up to 200 Coins!</p>
             <p className="font-body text-xs opacity-90 mt-1">Start earning now - your rewards await!</p>
           </div>

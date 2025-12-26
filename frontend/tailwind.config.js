@@ -7,8 +7,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        heading: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        body: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        heading: ['Eras Bold ITC', 'sans-serif'],
+        body: ['Eras Demi ITC', 'sans-serif'],
       },
       colors: {
         red: '#E63946',
@@ -20,4 +20,4 @@ export default {
     },
   },
   plugins: [],
-}
+} 

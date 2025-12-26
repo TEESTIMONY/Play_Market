@@ -86,7 +86,7 @@ const AuctionPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
           </div>
           <button
             onClick={() => onPageChange('bounties')}
-            className="bg-white text-green px-4 py-1 rounded-full font-heading text-xs font-light hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg"
+            className="bg-white text-green px-4 py-1 rounded-20% font-heading text-xs font-light hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg"
           >
             GO NOW &gt;
           </button>
