@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
+import { FaCoins } from 'react-icons/fa';
 
 interface PageProps {
   currentPage: string;
@@ -144,7 +145,7 @@ const AuctionPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
 
         {/* Latest Bid */}
         <div className="bg-gradient-to-r from-white to-gray-50 p-5 rounded-xl mb-6 w-full max-w-md text-center shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-200">
-          <p className="font-body text-black text-lg">Latest Bid: <span className="text-yellow font-bold text-xl animate-bounce">{latestBid} 🪙</span></p>
+          <p className="font-body text-black text-lg">Latest Bid: <span className="text-yellow font-bold text-xl animate-bounce">{latestBid} <FaCoins className="inline text-yellow-500" /></span></p>
         </div>
 
         {/* Place a Bid Button */}
@@ -168,7 +169,7 @@ const AuctionPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
                 {bid.isWinner && <p className="text-xs bg-green text-white px-2 py-1 rounded-full inline-block mt-1">👑Current Winner</p>}
               </div>
               <div className="text-right">
-                <p className="font-bold text-lg text-black">{bid.amount} 🪙</p>
+                <p className="font-bold text-lg text-black">{bid.amount} <FaCoins className="inline text-yellow-500" /></p>
               </div>
             </div>
           ))}

@@ -81,7 +81,7 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
 
       {/* Coin Balance */}
       <div className="flex items-center bg-gradient-to-r from-yellow-100 to-yellow-200 px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-shadow duration-200">
-        <span className="text-yellow-600 mr-2 animate-bounce text-xl">🪙</span>
+        <FaCoins className="text-yellow-600 mr-2 animate-bounce text-xl" />
         <span className="text-black font-bold text-lg">14</span>
       </div>
     </header>
