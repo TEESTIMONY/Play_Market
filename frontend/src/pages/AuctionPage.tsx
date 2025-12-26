@@ -169,7 +169,7 @@ const AuctionPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
                 {bid.isWinner && <p className="text-xs bg-green text-white px-2 py-1 rounded-full inline-block mt-1">👑Current Winner</p>}
               </div>
               <div className="text-right">
-                <p className="font-bold text-lg text-black">{bid.amount} 🪙</p>
+                <p className="font-bold text-lg text-black">{bid.amount} <FaCoins className="inline text-yellow-500" /></p>
               </div>
             </div>
           ))}
