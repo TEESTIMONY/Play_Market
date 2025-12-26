@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
+import { FaCoins } from 'react-icons/fa';
 
 interface PageProps {
   currentPage: string;
@@ -179,7 +180,7 @@ const BountiesPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
               <div className="flex items-center justify-between mb-6 animate-slide-in" style={{ animationDelay: '0.1s' }}>
                 <h1 className="font-heading text-3xl text-black hover:text-blue-600 transition-colors duration-300">{selectedBounty.title}</h1>
                 <div className="flex items-center bg-gradient-to-r from-yellow-100 to-yellow-200 px-4 py-2 rounded-xl shadow-md animate-bounce">
-                  <span className="text-yellow-600 mr-1 text-xl">🪙</span>
+                  <FaCoins className="text-yellow-600 mr-1 text-xl" />
                   <span className="font-bold text-2xl text-black">{selectedBounty.reward}</span>
                 </div>
               </div>
@@ -252,7 +253,7 @@ const BountiesPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
                   <p className="font-body text-gray-600 mb-3">{bounty.description}</p>
                   <div className="flex items-center gap-4">
                     <div className="flex items-center">
-                      <span className="text-yellow-500 mr-1">🪙</span>
+                      <FaCoins className="text-yellow-500 mr-1" />
                       <span className="font-bold text-lg text-black">{bounty.reward}</span>
                     </div>
                     {getStatusBadge(bounty)}
