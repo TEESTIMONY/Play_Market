@@ -74,9 +74,23 @@ const AuctionPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-200">
       <Header currentPage={currentPage} onPageChange={onPageChange} />
 
-      {/* Red Banner */}
-      <div className="bg-gradient-to-r from-red to-red-600 text-white text-center py-3 font-body shadow-lg animate-pulse">
-        Complete Tasks
+      {/* Campaign Banner */}
+      <div className="bg-red  text-white py-2 px-4 shadow-lg animate-pulse border-2 border-red-700">
+        <div className="flex items-center justify-between max-w-4xl mx-auto">
+          <div className="flex items-center space-x-2">
+            <span className="text-lg">🎯</span>
+            <div>
+              <p className="font-heading text-sm font-thin">Complete Tasks & Earn Up to 200 Coins!</p>
+              {/* <p className="font-body text-xs opacity-90">Join the challenge and maximize your rewards</p> */}
+            </div>
+          </div>
+          <button
+            onClick={() => onPageChange('bounties')}
+            className="bg-white text-green px-4 py-1 rounded-full font-heading text-xs font-light hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg"
+          >
+            GO NOW &gt;
+          </button>
+        </div>
       </div>
 
       {/* Auction Details */}
