@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaCoins, FaPlus, FaChevronDown, FaChevronRight } from 'react-icons/fa';
+import { FaCoins, FaChevronDown, FaChevronRight } from 'react-icons/fa';
 
 interface User {
   id: number;

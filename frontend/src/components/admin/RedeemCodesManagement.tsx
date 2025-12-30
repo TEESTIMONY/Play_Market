@@ -10,7 +10,7 @@ interface RedeemCode {
   usedBy?: string;
 }
 
-const RedeemCodesManagement = forwardRef((props, ref) => {
+const RedeemCodesManagement = forwardRef((_props, ref) => {
   const [codes, setCodes] = useState<RedeemCode[]>([
     { id: 1, code: 'WELCOME100', value: 100, status: 'active', createdDate: '2025-01-01' },
     { id: 2, code: 'BONUS50', value: 50, status: 'active', createdDate: '2025-01-02' },

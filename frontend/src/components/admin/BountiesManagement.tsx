@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
-import { FaPlus, FaEdit, FaTrash, FaChevronDown, FaChevronRight } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaChevronDown, FaChevronRight } from 'react-icons/fa';
 
 interface Bounty {
   id: number;
@@ -30,7 +30,7 @@ interface BountyParticipation {
   notes?: string;
 }
 
-const BountiesManagement = forwardRef(({ onActionButtonVisibilityChange }, ref) => {
+const BountiesManagement = forwardRef(({ onActionButtonVisibilityChange }: { onActionButtonVisibilityChange?: (visible: boolean) => void }, ref) => {
   const [activeTab, setActiveTab] = useState<'create' | 'results'>('create');
 
   const handleTabChange = (tab: 'create' | 'results') => {
@@ -62,7 +62,7 @@ const BountiesManagement = forwardRef(({ onActionButtonVisibilityChange }, ref) 
     },
   ]);
 
-  const [participations, setParticipations] = useState<BountyParticipation[]>([
+  const [participations] = useState<BountyParticipation[]>([
     {
       id: 1,
       user: 'John Doe',

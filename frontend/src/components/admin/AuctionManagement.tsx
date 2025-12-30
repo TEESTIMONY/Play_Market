@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { FaSave, FaEdit } from 'react-icons/fa';
 
-const AuctionManagement = forwardRef((props, ref) => {
+const AuctionManagement = forwardRef((_props, ref) => {
   const [auctionData, setAuctionData] = useState({
     title: '5-DAY MEAL PASS @ ST RINA',
     description: 'Because cooking is overrated and your gas deserves a break.',
