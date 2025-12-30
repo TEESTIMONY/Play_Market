@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { FaCoins } from 'react-icons/fa';
 
-interface PageProps {
-  currentPage: string;
-  onPageChange: (page: string) => void;
-}
-
-const AuctionPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
+const AuctionPage: React.FC = () => {
+  const navigate = useNavigate();
   // Hardcoded data for demo
   const auctionTitle = '5-DAY MEAL PASS @ ST RINA';
   const auctionDescription = 'Because cooking is overrated and your gas deserves a break.';
@@ -72,7 +69,7 @@ const AuctionPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-200">
-      <Header currentPage={currentPage} onPageChange={onPageChange} />
+      <Header />
 
       {/* Campaign Banner */}
       <div className="bg-red  text-white py-2 px-4 shadow-lg animate-pulse border-2 border-red-700">
@@ -85,10 +82,10 @@ const AuctionPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
             </div>
           </div>
           <button
-            onClick={() => onPageChange('bounties')}
+            onClick={() => navigate('/bounties')}
             className="bg-white text-green px-4 py-1 rounded-20% font-heading text-xs font-light hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg"
           >
-            GO NOW &gt;
+            GO NOW {'>'}
           </button>
         </div>
       </div>

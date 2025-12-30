@@ -1,26 +1,21 @@
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AuctionPage from './pages/AuctionPage';
 import RedeemPage from './pages/RedeemPage';
 import BountiesPage from './pages/BountiesPage';
+import AdminPage from './pages/AdminPage';
 import './App.css'
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('auction');
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'auction':
-        return <AuctionPage currentPage={currentPage} onPageChange={setCurrentPage} />;
-      case 'bounties':
-        return <BountiesPage currentPage={currentPage} onPageChange={setCurrentPage} />;
-      case 'redeem':
-        return <RedeemPage currentPage={currentPage} onPageChange={setCurrentPage} />;
-      default:
-        return <AuctionPage currentPage={currentPage} onPageChange={setCurrentPage} />;
-    }
-  };
-
-  return renderPage();
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<AuctionPage />} />
+        <Route path="/bounties" element={<BountiesPage />} />
+        <Route path="/redeem" element={<RedeemPage />} />
+        <Route path="/admin/super-secret-key" element={<AdminPage />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App

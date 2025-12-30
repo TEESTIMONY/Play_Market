@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 
-interface PageProps {
-  currentPage: string;
-  onPageChange: (page: string) => void;
-}
-
-const RedeemPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
+const RedeemPage: React.FC = () => {
   const [redeemCode, setRedeemCode] = useState('');
 
   const handleSubmit = () => {
@@ -16,7 +11,7 @@ const RedeemPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-200 flex flex-col">
-      <Header currentPage={currentPage} onPageChange={onPageChange} />
+      <Header />
 
       {/* Redeem Section */}
       <div className="flex-1 flex flex-col items-center justify-center p-3 md:p-8">

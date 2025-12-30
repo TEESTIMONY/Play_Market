@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { FaCoins } from 'react-icons/fa';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { FaCoins, FaBars, FaTimes } from 'react-icons/fa';
 
-interface HeaderProps {
-  currentPage: string;
-  onPageChange: (page: string) => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
+const Header: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const pages = [
-    { name: 'Auction', key: 'auction' },
-    { name: 'Bounties', key: 'bounties' },
-    { name: 'Redeem', key: 'redeem' },
+    { name: 'Auction', key: 'auction', path: '/' },
+    { name: 'Bounties', key: 'bounties', path: '/bounties' },
+    { name: 'Redeem', key: 'redeem', path: '/redeem' },
   ];
 
-  const handlePageClick = (pageKey: string) => {
-    onPageChange(pageKey);
+  const currentPage = location.pathname === '/' ? 'auction' : location.pathname.slice(1);
+
+  const handlePageClick = (path: string) => {
+    navigate(path);
     setIsMenuOpen(false);
   };
 
@@ -25,13 +25,9 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className="md:hidden mr-2 p-3 rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 hover:from-blue-100 hover:to-blue-200 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105"
+        className="md:hidden mr-2 bg-white p-2 rounded-md shadow-lg hover:bg-gray-50 transition-colors text-black"
       >
-        <div className="w-6 h-6 flex flex-col justify-center relative">
-          <span className={`absolute w-5 h-0.5 bg-gray-700 rounded transition-all duration-300 ${isMenuOpen ? 'rotate-45 top-2' : 'top-1'}`}></span>
-          <span className={`absolute w-5 h-0.5 bg-gray-700 rounded transition-all duration-300 ${isMenuOpen ? 'opacity-0' : 'top-2.5'}`}></span>
-          <span className={`absolute w-5 h-0.5 bg-gray-700 rounded transition-all duration-300 ${isMenuOpen ? '-rotate-45 top-2' : 'top-4'}`}></span>
-        </div>
+        {isMenuOpen ? <FaTimes /> : <FaBars />}
       </button>
 
       {/* Logo */}
@@ -39,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
         src="/PM LOGO BLACK .png"
         alt="Playmarket Logo"
         className="h-12 hover:scale-105 transition-transform duration-200 cursor-pointer"
-        onClick={() => handlePageClick('auction')}
+        onClick={() => handlePageClick('/')}
       />
 
       {/* Web Navigation */}
@@ -47,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
         {pages.map((page) => (
           <button
             key={page.key}
-            onClick={() => handlePageClick(page.key)}
+            onClick={() => handlePageClick(page.path)}
             className={`font-body text-lg transition-all duration-200 hover:scale-110 ${
               currentPage === page.key ? 'text-red font-semibold' : 'text-black hover:text-red'
             }`}
@@ -64,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
             {pages.map((page, index) => (
               <button
                 key={page.key}
-                onClick={() => handlePageClick(page.key)}
+                onClick={() => handlePageClick(page.path)}
                 className={`text-left px-6 py-4 font-body text-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-blue-700 transform hover:translate-x-2 ${
                   currentPage === page.key
                     ? 'text-red font-semibold bg-gradient-to-r from-red-50 to-pink-50 border-r-4 border-red-500 shadow-sm'

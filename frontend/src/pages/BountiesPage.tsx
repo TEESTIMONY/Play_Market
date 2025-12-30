@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import { FaCoins } from 'react-icons/fa';
 
-interface PageProps {
-  currentPage: string;
-  onPageChange: (page: string) => void;
-}
-
-const BountiesPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
+const BountiesPage: React.FC = () => {
   const [selectedBounty, setSelectedBounty] = useState<any>(null);
   const [submission, setSubmission] = useState('');
 
@@ -162,7 +157,7 @@ const BountiesPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
   if (selectedBounty) {
     return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-200">
-        <Header currentPage={currentPage} onPageChange={onPageChange} />
+        <Header />
 
         {/* Expanded Bounty View */}
         <div className="p-4 md:p-8 animate-fade-in">
@@ -223,7 +218,7 @@ const BountiesPage: React.FC<PageProps> = ({ currentPage, onPageChange }) => {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-200">
-      <Header currentPage={currentPage} onPageChange={onPageChange} />
+      <Header />
 
       {/* Campaign Banner */}
       <div className="bg-red text-white py-2 px-4 shadow-lg animate-pulse border-2 border-red-700">
