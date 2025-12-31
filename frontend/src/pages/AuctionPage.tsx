@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
-import { FaCoins } from 'react-icons/fa';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { FaCoins, FaBars, FaTimes, FaHome, FaGavel, FaGift, FaUser } from 'react-icons/fa';
 
 const AuctionPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const navigationItems = [
+    { id: 'auction', name: 'Auctions', icon: FaGavel, path: '/' },
+    { id: 'bounties', name: 'Bounties', icon: FaGift, path: '/bounties' },
+    { id: 'redeem', name: 'Redeem', icon: FaHome, path: '/redeem' },
+    { id: 'profile', name: 'Profile', icon: FaUser, path: '/profile' },
+  ];
+
+  const currentPage = location.pathname === '/' ? 'auction' : location.pathname.slice(1);
+
   // Hardcoded data for demo
   const auctionTitle = '5-DAY MEAL PASS @ ST RINA';
   const auctionDescription = 'Because cooking is overrated and your gas deserves a break.';
@@ -67,31 +78,119 @@ const AuctionPage: React.FC = () => {
     { user: 'USER 6', amount: 115 },
   ];
 
-  return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-200">
-      <Header />
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    setIsMobileMenuOpen(false);
+  };
 
-      {/* Campaign Banner */}
-      <div className="bg-red  text-white py-2 px-4 shadow-lg animate-pulse border-2 border-red-700">
-        <div className="flex items-center justify-between max-w-4xl mx-auto">
-          <div className="flex items-center space-x-2">
-            <span className="text-lg">🎯</span>
-            <div>
-              <p className="font-heading text-sm font-thin">Complete Tasks & Earn Up to 200 Coins!</p>
-              {/* <p className="font-body text-xs opacity-90">Join the challenge and maximize your rewards</p> */}
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
+      <div className="flex h-screen">
+        {/* Desktop Sidebar */}
+        <div className={`w-64 bg-white shadow-lg fixed lg:static inset-y-0 left-0 z-40 transform ${
+          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        } lg:translate-x-0 transition-transform duration-300 ease-in-out`}>
+          <div className="p-6">
+            <div className="flex justify-center mb-4">
+              <img
+                src="/PM LOGO BLACK .png"
+                alt="PlayMarket Logo"
+                className="h-16"
+              />
             </div>
           </div>
-          <button
-            onClick={() => navigate('/bounties')}
-            className="bg-white text-green px-4 py-1 rounded-20% font-heading text-xs font-light hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg"
-          >
-            GO NOW {'>'}
-          </button>
+          <nav className="mt-6">
+            {navigationItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavigation(item.path)}
+                  className={`w-full text-left px-6 py-3 hover:bg-gray-50 transition-colors ${
+                    currentPage === item.id ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-900'
+                  }`}
+                >
+                  <Icon className="inline mr-3" />
+                  {item.name}
+                </button>
+              );
+            })}
+          </nav>
         </div>
-      </div>
 
-      {/* Auction Details */}
-      <div className="flex flex-col items-center p-4 md:p-8">
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div
+            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
+
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Mobile Header */}
+          <div className="lg:hidden flex items-center p-4 bg-white shadow-sm border-b border-gray-200 relative">
+            {/* Left: Hamburger Menu */}
+            <div className="flex items-center z-10">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-black"
+              >
+                {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+              </button>
+            </div>
+
+            {/* Center: Logo (Absolutely Centered) */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 z-20">
+              <img
+                src="/PM LOGO BLACK .png"
+                alt="PlayMarket Logo"
+                className="h-10 hover:scale-105 transition-transform duration-200 cursor-pointer"
+                onClick={() => handleNavigation('/')}
+              />
+            </div>
+
+            {/* Right: Coin Balance + Profile Icon */}
+            <div className="flex items-center space-x-3 ml-auto z-10">
+              {/* Coin Balance */}
+              <div className="flex items-center bg-gradient-to-r from-yellow-100 to-yellow-200 px-3 py-1 rounded-full shadow-md hover:shadow-lg transition-shadow duration-200">
+                <FaCoins className="text-amber-400 mr-1 animate-bounce text-sm" />
+                <span className="text-black font-bold text-sm">14</span>
+              </div>
+
+              {/* Profile Button */}
+              <button
+                onClick={() => handleNavigation('/profile')}
+                className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                title="Profile"
+              >
+                <FaUser className="text-gray-600" />
+              </button>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 overflow-auto">
+            {/* Campaign Banner */}
+            <div className="bg-red text-white py-2 px-4 shadow-lg animate-pulse border-2 border-red-700">
+              <div className="flex items-center justify-between max-w-6xl mx-auto">
+                <div className="flex items-center space-x-2">
+                  <span className="text-lg">🎯</span>
+                  <div>
+                    <p className="font-heading text-sm font-thin">Complete Tasks & Earn Up to 200 Coins!</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => navigate('/bounties')}
+                  className="bg-white text-green px-4 py-1 rounded-20% font-heading text-xs font-light hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg"
+                >
+                  GO NOW {'>'}
+                </button>
+              </div>
+            </div>
+
+            {/* Auction Details */}
+            <div className="flex flex-col items-center p-4 md:p-8">
         {/* Product Image Slideshow */}
         <div className="w-full max-w-md h-48 md:h-64 mb-4 rounded-xl shadow-xl overflow-hidden relative">
           <div className="relative w-full h-full">
@@ -164,26 +263,29 @@ const AuctionPage: React.FC = () => {
           🚀 Place a Bid
         </button>
 
-        {/* Bidding Leaderboard */}
-        <div className="w-full max-w-md space-y-3">
-          {bids.map((bid, index) => (
-            <div
-              key={index}
-              className={`flex items-center p-4 ${bid.isWinner ? 'bg-gradient-to-r from-green-600 to-green-800 text-white shadow-green-300' : 'bg-gradient-to-r from-white to-gray-50 text-black'} rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-102 animate-slide-in`}
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-gray-200 to-gray-400 rounded-full mr-4 flex items-center justify-center shadow-md">
-                <span className="text-black font-bold">{bid.user[0]}</span>
-              </div>
-              <div className={`flex-1 ${bid.isWinner ? 'bg-green-600 rounded-lg p-2' : ''}`}>
-                <p className={`font-body font-semibold ${bid.isWinner ? 'text-black' : ''}`}>{bid.user}</p>
-                {bid.isWinner && <p className="text-xs bg-green text-white px-2 py-1 rounded-full inline-block mt-1">👑Current Winner</p>}
-              </div>
-              <div className="text-right">
-                <p className="font-bold text-lg text-black">{bid.amount} <FaCoins className="inline text-amber-400" /></p>
+              {/* Bidding Leaderboard */}
+              <div className="w-full max-w-md space-y-3">
+                {bids.map((bid, index) => (
+                  <div
+                    key={index}
+                    className={`flex items-center p-4 ${bid.isWinner ? 'bg-gradient-to-r from-green-600 to-green-800 text-white shadow-green-300' : 'bg-gradient-to-r from-white to-gray-50 text-black'} rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-102 animate-slide-in`}
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className="w-12 h-12 bg-gradient-to-br from-gray-200 to-gray-400 rounded-full mr-4 flex items-center justify-center shadow-md">
+                      <span className="text-black font-bold">{bid.user[0]}</span>
+                    </div>
+                    <div className={`flex-1 ${bid.isWinner ? 'bg-green-600 rounded-lg p-2' : ''}`}>
+                      <p className={`font-body font-semibold ${bid.isWinner ? 'text-black' : ''}`}>{bid.user}</p>
+                      {bid.isWinner && <p className="text-xs bg-green text-white px-2 py-1 rounded-full inline-block mt-1">👑Current Winner</p>}
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-lg text-black">{bid.amount} <FaCoins className="inline text-amber-400" /></p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </div>

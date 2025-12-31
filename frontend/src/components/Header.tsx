@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaCoins, FaBars, FaTimes } from 'react-icons/fa';
+import { FaCoins, FaBars, FaTimes, FaUser } from 'react-icons/fa';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -11,6 +11,7 @@ const Header: React.FC = () => {
     { name: 'Auction', key: 'auction', path: '/' },
     { name: 'Bounties', key: 'bounties', path: '/bounties' },
     { name: 'Redeem', key: 'redeem', path: '/redeem' },
+    { name: 'Profile', key: 'profile', path: '/profile' },
   ];
 
   const currentPage = location.pathname === '/' ? 'auction' : location.pathname.slice(1);
@@ -21,37 +22,63 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-white to-gray-50 p-5 flex items-center justify-between shadow-lg border-b border-gray-200 animate-fade-in relative">
-      {/* Mobile Menu Button */}
-      <button
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className="md:hidden mr-2 bg-white p-2 rounded-md shadow-lg hover:bg-gray-50 transition-colors text-black"
-      >
-        {isMenuOpen ? <FaTimes /> : <FaBars />}
-      </button>
+    <header className="bg-gradient-to-r from-white to-gray-50 p-5 flex items-center shadow-lg border-b border-gray-200 animate-fade-in relative">
+      {/* Left Container - Hamburger Menu */}
+      <div className="flex items-center z-10">
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="md:hidden bg-white p-2 rounded-md shadow-lg hover:bg-gray-50 transition-colors text-black"
+        >
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      </div>
 
-      {/* Logo */}
-      <img
-        src="/PM LOGO BLACK .png"
-        alt="Playmarket Logo"
-        className="h-12 hover:scale-105 transition-transform duration-200 cursor-pointer"
-        onClick={() => handlePageClick('/')}
-      />
+      {/* Center Container - Logo (Absolutely Centered) */}
+      <div className="absolute left-1/2 transform -translate-x-1/2 z-20">
+        <img
+          src="/PM LOGO BLACK .png"
+          alt="Playmarket Logo"
+          className="h-12 hover:scale-105 transition-transform duration-200 cursor-pointer"
+          onClick={() => handlePageClick('/')}
+        />
+      </div>
 
-      {/* Web Navigation */}
-      <nav className="hidden md:flex space-x-8">
-        {pages.map((page) => (
-          <button
-            key={page.key}
-            onClick={() => handlePageClick(page.path)}
-            className={`font-body text-lg transition-all duration-200 hover:scale-110 ${
-              currentPage === page.key ? 'text-red font-semibold' : 'text-black hover:text-red'
-            }`}
-          >
-            {page.name}
-          </button>
-        ))}
-      </nav>
+      {/* Right Container - Navigation, Coin & User Icon */}
+      <div className="flex items-center space-x-4 ml-auto z-10">
+        {/* Web Navigation */}
+        <nav className="hidden md:flex space-x-6 mr-4">
+          {pages.map((page) => (
+            <button
+              key={page.key}
+              onClick={() => handlePageClick(page.path)}
+              className={`font-body text-lg transition-all duration-200 hover:scale-110 ${
+                currentPage === page.key ? 'text-red font-semibold' : 'text-black hover:text-red'
+              }`}
+            >
+              {page.name}
+            </button>
+          ))}
+        </nav>
+
+        {/* Profile Button */}
+        <button
+          onClick={() => handlePageClick('/profile')}
+          className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
+            currentPage === 'profile'
+              ? 'bg-blue-100 text-blue-600 shadow-md'
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+          title="Profile"
+        >
+          <FaUser className="text-lg" />
+        </button>
+
+        {/* Coin Balance */}
+        <div className="flex items-center bg-gradient-to-r from-yellow-100 to-yellow-200 px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-shadow duration-200">
+          <FaCoins className="text-amber-400 mr-2 animate-bounce text-xl" />
+          <span className="text-black font-bold text-lg">14</span>
+        </div>
+      </div>
 
       {/* Mobile Menu Dropdown */}
       {isMenuOpen && (
@@ -74,12 +101,6 @@ const Header: React.FC = () => {
           </nav>
         </div>
       )}
-
-      {/* Coin Balance */}
-      <div className="flex items-center bg-gradient-to-r from-yellow-100 to-yellow-200 px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-shadow duration-200">
-        <FaCoins className="text-amber-400 mr-2 animate-bounce text-xl" />
-        <span className="text-black font-bold text-lg">14</span>
-      </div>
     </header>
   );
 };
