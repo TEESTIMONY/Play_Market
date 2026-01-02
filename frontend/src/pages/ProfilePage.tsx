@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import { FaUser, FaCoins, FaShoppingCart, FaTrophy, FaHistory, FaCog, FaHome, FaGavel } from 'react-icons/fa';
 
