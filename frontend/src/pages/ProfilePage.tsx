@@ -16,8 +16,6 @@ interface User {
 }
 
 const ProfilePage = () => {
-  const navigate = useNavigate();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -80,9 +78,7 @@ const ProfilePage = () => {
     }));
   };
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+
 
   const renderTabContent = () => {
     switch (activeTab) {

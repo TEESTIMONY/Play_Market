@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 
 const BountiesPage: React.FC = () => {
-  const navigate = useNavigate();
   const [selectedBounty, setSelectedBounty] = useState<any>(null);
   const [submission, setSubmission] = useState('');
 
