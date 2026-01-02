@@ -54,7 +54,7 @@ const LoginPage: React.FC = () => {
           {/* Typography */}
           <div className="mb-16">
             <h1
-              className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4"
               style={{ fontFamily: "'Eras Bold ITC', sans-serif" }}
             >
               Welcome to Playmarket
