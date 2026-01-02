@@ -5,7 +5,9 @@ const AuctionManagement = forwardRef((_props, ref) => {
   const [auctionData, setAuctionData] = useState({
     title: '5-DAY MEAL PASS @ ST RINA',
     description: 'Because cooking is overrated and your gas deserves a break.',
-    duration: { days: 8, hours: 11, minutes: 26, seconds: 0 },
+    startDuration: { days: 2, hours: 5, minutes: 30, seconds: 0 },
+    endDuration: { days: 8, hours: 11, minutes: 26, seconds: 0 },
+    leaderboardSize: 5,
     images: ['/ST Rina 1.jpg', '/ST Rina 2.jpg', '/ST Rina 3.jpg']
   });
 
@@ -33,10 +35,24 @@ const AuctionManagement = forwardRef((_props, ref) => {
     }));
   };
 
-  const handleDurationChange = (unit: string, value: number) => {
+  const handleStartDurationChange = (unit: string, value: number) => {
     setAuctionData(prev => ({
       ...prev,
-      duration: { ...prev.duration, [unit]: value }
+      startDuration: { ...prev.startDuration, [unit]: value }
+    }));
+  };
+
+  const handleEndDurationChange = (unit: string, value: number) => {
+    setAuctionData(prev => ({
+      ...prev,
+      endDuration: { ...prev.endDuration, [unit]: value }
+    }));
+  };
+
+  const handleLeaderboardSizeChange = (value: number) => {
+    setAuctionData(prev => ({
+      ...prev,
+      leaderboardSize: value
     }));
   };
 
@@ -47,6 +63,19 @@ const AuctionManagement = forwardRef((_props, ref) => {
   };
 
   const handleSave = () => {
+    // Validation: Ensure start time is before end time
+    const startTotalMinutes = (auctionData.startDuration.days * 24 * 60) +
+                             (auctionData.startDuration.hours * 60) +
+                             auctionData.startDuration.minutes;
+    const endTotalMinutes = (auctionData.endDuration.days * 24 * 60) +
+                           (auctionData.endDuration.hours * 60) +
+                           auctionData.endDuration.minutes;
+
+    if (startTotalMinutes >= endTotalMinutes) {
+      alert('Error: Auction start time must be before the end time!');
+      return;
+    }
+
     // TODO: Save to backend
     console.log('Saving auction data:', auctionData);
     setShowModal(false);
@@ -66,19 +95,19 @@ const AuctionManagement = forwardRef((_props, ref) => {
             {/* Countdown Timer */}
             <div className="flex items-center justify-center md:justify-start space-x-2 md:space-x-4">
               <div className="text-center">
-                <div className="text-xl md:text-2xl font-bold text-blue-600">{auctionData.duration.days.toString().padStart(2, '0')}</div>
+                <div className="text-xl md:text-2xl font-bold text-blue-600">{auctionData.endDuration.days.toString().padStart(2, '0')}</div>
                 <div className="text-xs text-gray-500">DAYS</div>
               </div>
               <div className="text-center">
-                <div className="text-xl md:text-2xl font-bold text-blue-600">{auctionData.duration.hours.toString().padStart(2, '0')}</div>
+                <div className="text-xl md:text-2xl font-bold text-blue-600">{auctionData.endDuration.hours.toString().padStart(2, '0')}</div>
                 <div className="text-xs text-gray-500">HOURS</div>
               </div>
               <div className="text-center">
-                <div className="text-xl md:text-2xl font-bold text-blue-600">{auctionData.duration.minutes.toString().padStart(2, '0')}</div>
+                <div className="text-xl md:text-2xl font-bold text-blue-600">{auctionData.endDuration.minutes.toString().padStart(2, '0')}</div>
                 <div className="text-xs text-gray-500">MIN</div>
               </div>
               <div className="text-center">
-                <div className="text-xl md:text-2xl font-bold text-blue-600">{auctionData.duration.seconds.toString().padStart(2, '0')}</div>
+                <div className="text-xl md:text-2xl font-bold text-blue-600">{auctionData.endDuration.seconds.toString().padStart(2, '0')}</div>
                 <div className="text-xs text-gray-500">SEC</div>
               </div>
             </div>
@@ -151,55 +180,120 @@ const AuctionManagement = forwardRef((_props, ref) => {
                       rows={3}
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Leaderboard Size</label>
+                    <input
+                      type="number"
+                      value={auctionData.leaderboardSize}
+                      onChange={(e) => handleLeaderboardSizeChange(parseInt(e.target.value) || 1)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      min="1"
+                      max="20"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Set the number of top bidders to display on the auction page (1-20)</p>
+                  </div>
                 </div>
               </div>
 
               {/* Timer Settings */}
-              <div>
-                <h4 className="text-lg font-semibold mb-4">Timer Settings</h4>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Days</label>
-                    <input
-                      type="number"
-                      value={auctionData.duration.days}
-                      onChange={(e) => handleDurationChange('days', parseInt(e.target.value) || 0)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      min="0"
-                    />
+              <div className="space-y-6">
+                {/* Start Time */}
+                <div>
+                  <h5 className="text-md font-semibold mb-3 text-blue-600">🕐 Auction Start Time</h5>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Days</label>
+                      <input
+                        type="number"
+                        value={auctionData.startDuration.days}
+                        onChange={(e) => handleStartDurationChange('days', parseInt(e.target.value) || 0)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                        min="0"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Hours</label>
+                      <input
+                        type="number"
+                        value={auctionData.startDuration.hours}
+                        onChange={(e) => handleStartDurationChange('hours', parseInt(e.target.value) || 0)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                        min="0"
+                        max="23"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Minutes</label>
+                      <input
+                        type="number"
+                        value={auctionData.startDuration.minutes}
+                        onChange={(e) => handleStartDurationChange('minutes', parseInt(e.target.value) || 0)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                        min="0"
+                        max="59"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Seconds</label>
+                      <input
+                        type="number"
+                        value={auctionData.startDuration.seconds}
+                        onChange={(e) => handleStartDurationChange('seconds', parseInt(e.target.value) || 0)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                        min="0"
+                        max="59"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Hours</label>
-                    <input
-                      type="number"
-                      value={auctionData.duration.hours}
-                      onChange={(e) => handleDurationChange('hours', parseInt(e.target.value) || 0)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      min="0"
-                      max="23"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Minutes</label>
-                    <input
-                      type="number"
-                      value={auctionData.duration.minutes}
-                      onChange={(e) => handleDurationChange('minutes', parseInt(e.target.value) || 0)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      min="0"
-                      max="59"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Seconds</label>
-                    <input
-                      type="number"
-                      value={auctionData.duration.seconds}
-                      onChange={(e) => handleDurationChange('seconds', parseInt(e.target.value) || 0)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      min="0"
-                      max="59"
-                    />
+                </div>
+
+                {/* End Time */}
+                <div>
+                  <h5 className="text-md font-semibold mb-3 text-red">⏰ Auction End Time</h5>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Days</label>
+                      <input
+                        type="number"
+                        value={auctionData.endDuration.days}
+                        onChange={(e) => handleEndDurationChange('days', parseInt(e.target.value) || 0)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                        min="0"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Hours</label>
+                      <input
+                        type="number"
+                        value={auctionData.endDuration.hours}
+                        onChange={(e) => handleEndDurationChange('hours', parseInt(e.target.value) || 0)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                        min="0"
+                        max="23"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Minutes</label>
+                      <input
+                        type="number"
+                        value={auctionData.endDuration.minutes}
+                        onChange={(e) => handleEndDurationChange('minutes', parseInt(e.target.value) || 0)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                        min="0"
+                        max="59"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Seconds</label>
+                      <input
+                        type="number"
+                        value={auctionData.endDuration.seconds}
+                        onChange={(e) => handleEndDurationChange('seconds', parseInt(e.target.value) || 0)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                        min="0"
+                        max="59"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

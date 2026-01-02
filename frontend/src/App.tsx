@@ -4,6 +4,7 @@ import RedeemPage from './pages/RedeemPage';
 import BountiesPage from './pages/BountiesPage';
 import AdminPage from './pages/AdminPage';
 import ProfilePage from './pages/ProfilePage';
+import LoginPage from './pages/LoginPage';
 import './App.css'
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<AuctionPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/bounties" element={<BountiesPage />} />
         <Route path="/redeem" element={<RedeemPage />} />
         <Route path="/profile" element={<ProfilePage />} />

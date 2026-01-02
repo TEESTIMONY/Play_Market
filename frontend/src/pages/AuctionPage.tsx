@@ -1,25 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { FaCoins, FaBars, FaTimes, FaHome, FaGavel, FaGift, FaUser } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { FaCoins } from 'react-icons/fa';
+import Sidebar from '../components/Sidebar';
 
 const AuctionPage: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const navigationItems = [
-    { id: 'auction', name: 'Auctions', icon: FaGavel, path: '/' },
-    { id: 'bounties', name: 'Bounties', icon: FaGift, path: '/bounties' },
-    { id: 'redeem', name: 'Redeem', icon: FaHome, path: '/redeem' },
-    { id: 'profile', name: 'Profile', icon: FaUser, path: '/profile' },
-  ];
-
-  const currentPage = location.pathname === '/' ? 'auction' : location.pathname.slice(1);
 
   // Hardcoded data for demo
   const auctionTitle = '5-DAY MEAL PASS @ ST RINA';
   const auctionDescription = 'Because cooking is overrated and your gas deserves a break.';
   const latestBid = 119;
+
+  // Auction phase state
+  const [auctionPhase, setAuctionPhase] = useState<'starting' | 'running'>('starting');
+
+  // Separate time states for start and end
+  const [startTimeLeft, setStartTimeLeft] = useState({
+    days: 2,
+    hours: 5,
+    minutes: 30,
+    seconds: 0,
+  });
+
+  const [endTimeLeft, setEndTimeLeft] = useState({
+    days: 8,
+    hours: 11,
+    minutes: 26,
+    seconds: 0,
+  });
 
   // Slideshow images for ST Rina
   const images = [
@@ -30,16 +38,43 @@ const AuctionPage: React.FC = () => {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const [timeLeft, setTimeLeft] = useState({
-    days: 8,
-    hours: 11,
-    minutes: 26,
-    seconds: 0,
-  });
-
+  // Start countdown timer
   useEffect(() => {
+    if (auctionPhase !== 'starting') return;
+
     const timer = setInterval(() => {
-      setTimeLeft((prev) => {
+      setStartTimeLeft((prev) => {
+        let { days, hours, minutes, seconds } = prev;
+        seconds--;
+        if (seconds < 0) {
+          seconds = 59;
+          minutes--;
+        }
+        if (minutes < 0) {
+          minutes = 59;
+          hours--;
+        }
+        if (hours < 0) {
+          hours = 23;
+          days--;
+        }
+        if (days < 0) {
+          // Switch to end phase when start timer reaches zero
+          setAuctionPhase('running');
+          clearInterval(timer);
+        }
+        return { days, hours, minutes, seconds };
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [auctionPhase]);
+
+  // End countdown timer
+  useEffect(() => {
+    if (auctionPhase !== 'running') return;
+
+    const timer = setInterval(() => {
+      setEndTimeLeft((prev) => {
         let { days, hours, minutes, seconds } = prev;
         seconds--;
         if (seconds < 0) {
@@ -59,7 +94,7 @@ const AuctionPage: React.FC = () => {
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [auctionPhase]);
 
   // Slideshow effect
   useEffect(() => {
@@ -78,99 +113,9 @@ const AuctionPage: React.FC = () => {
     { user: 'USER 6', amount: 115 },
   ];
 
-  const handleNavigation = (path: string) => {
-    navigate(path);
-    setIsMobileMenuOpen(false);
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
-      <div className="flex h-screen">
-        {/* Desktop Sidebar */}
-        <div className={`w-64 bg-white shadow-lg fixed lg:static inset-y-0 left-0 z-40 transform ${
-          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 transition-transform duration-300 ease-in-out`}>
-          <div className="p-6">
-            <div className="flex justify-center mb-4">
-              <img
-                src="/PM LOGO BLACK .png"
-                alt="PlayMarket Logo"
-                className="h-16"
-              />
-            </div>
-          </div>
-          <nav className="mt-6">
-            {navigationItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavigation(item.path)}
-                  className={`w-full text-left px-6 py-3 hover:bg-gray-50 transition-colors ${
-                    currentPage === item.id ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-900'
-                  }`}
-                >
-                  <Icon className="inline mr-3" />
-                  {item.name}
-                </button>
-              );
-            })}
-          </nav>
-        </div>
-
-        {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          <div
-            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-        )}
-
-        {/* Main Content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Mobile Header */}
-          <div className="lg:hidden flex items-center p-4 bg-white shadow-sm border-b border-gray-200 relative">
-            {/* Left: Hamburger Menu */}
-            <div className="flex items-center z-10">
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-black"
-              >
-                {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
-              </button>
-            </div>
-
-            {/* Center: Logo (Absolutely Centered) */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 z-20">
-              <img
-                src="/PM LOGO BLACK .png"
-                alt="PlayMarket Logo"
-                className="h-10 hover:scale-105 transition-transform duration-200 cursor-pointer"
-                onClick={() => handleNavigation('/')}
-              />
-            </div>
-
-            {/* Right: Coin Balance + Profile Icon */}
-            <div className="flex items-center space-x-3 ml-auto z-10">
-              {/* Coin Balance */}
-              <div className="flex items-center bg-gradient-to-r from-yellow-100 to-yellow-200 px-3 py-1 rounded-full shadow-md hover:shadow-lg transition-shadow duration-200">
-                <FaCoins className="text-amber-400 mr-1 animate-bounce text-sm" />
-                <span className="text-black font-bold text-sm">14</span>
-              </div>
-
-              {/* Profile Button */}
-              <button
-                onClick={() => handleNavigation('/profile')}
-                className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-                title="Profile"
-              >
-                <FaUser className="text-gray-600" />
-              </button>
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="flex-1 overflow-auto">
+    <Sidebar>
+      <div className="flex-1 overflow-auto">
             {/* Campaign Banner */}
             <div className="bg-red text-white py-2 px-4 shadow-lg animate-pulse border-2 border-red-700">
               <div className="flex items-center justify-between max-w-6xl mx-auto">
@@ -192,7 +137,7 @@ const AuctionPage: React.FC = () => {
             {/* Auction Details */}
             <div className="flex flex-col items-center p-4 md:p-8">
         {/* Product Image Slideshow */}
-        <div className="w-full max-w-md h-48 md:h-64 mb-4 rounded-xl shadow-xl overflow-hidden relative">
+        <div className="w-full max-w-md lg:max-w-2xl h-64 md:h-96 mb-4 rounded-xl shadow-xl overflow-hidden relative">
           <div className="relative w-full h-full">
             {images.map((image, index) => (
               <img
@@ -228,43 +173,68 @@ const AuctionPage: React.FC = () => {
         <p className="font-body font-thin text-black mb-4 text-center">{auctionDescription}</p>
 
         {/* Timer */}
-        <div className="bg-gradient-to-r from-black to-gray-900 text-white p-6 rounded-xl mb-6 w-full max-w-md shadow-2xl animate-fade-in relative">
+        <div className="bg-gradient-to-r from-black to-gray-900 text-white p-6 rounded-xl mb-6 w-full max-w-md lg:max-w-2xl shadow-2xl animate-fade-in relative">
           <div className="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs px-3 py-1 rounded-full font-bold animate-bounce shadow-lg border-2 border-white">
             ⏰ +3 min
           </div>
-          <p className="text-center text-gray-300 mb-4 font-body">Auction ends in:</p>
+          <p className="text-center text-gray-300 mb-4 font-body">
+            {auctionPhase === 'starting' ? 'Auction starts in:' : 'Auction ends in:'}
+          </p>
           <div className="flex justify-around">
-            <div className="text-center transform hover:scale-110 transition-transform duration-200">
-              <div className="text-3xl md:text-4xl font-bold animate-pulse">{timeLeft.days.toString().padStart(2, '0')}</div>
-              <div className="text-xs font-light">Days</div>
-            </div>
-            <div className="text-center transform hover:scale-110 transition-transform duration-200">
-              <div className="text-3xl md:text-4xl font-bold animate-pulse">{timeLeft.hours.toString().padStart(2, '0')}</div>
-              <div className="text-xs font-light">Hours</div>
-            </div>
-            <div className="text-center transform hover:scale-110 transition-transform duration-200">
-              <div className="text-3xl md:text-4xl font-bold animate-pulse">{timeLeft.minutes.toString().padStart(2, '0')}</div>
-              <div className="text-xs font-light">Minutes</div>
-            </div>
-            <div className="text-center transform hover:scale-110 transition-transform duration-200">
-              <div className="text-3xl md:text-4xl font-bold animate-pulse">{timeLeft.seconds.toString().padStart(2, '0')}</div>
-              <div className="text-xs font-light">Seconds</div>
-            </div>
+            {auctionPhase === 'starting' ? (
+              <>
+                <div className="text-center transform hover:scale-110 transition-transform duration-200">
+                  <div className="text-3xl md:text-4xl font-bold animate-pulse">{startTimeLeft.days.toString().padStart(2, '0')}</div>
+                  <div className="text-xs font-light">Days</div>
+                </div>
+                <div className="text-center transform hover:scale-110 transition-transform duration-200">
+                  <div className="text-3xl md:text-4xl font-bold animate-pulse">{startTimeLeft.hours.toString().padStart(2, '0')}</div>
+                  <div className="text-xs font-light">Hours</div>
+                </div>
+                <div className="text-center transform hover:scale-110 transition-transform duration-200">
+                  <div className="text-3xl md:text-4xl font-bold animate-pulse">{startTimeLeft.minutes.toString().padStart(2, '0')}</div>
+                  <div className="text-xs font-light">Minutes</div>
+                </div>
+                <div className="text-center transform hover:scale-110 transition-transform duration-200">
+                  <div className="text-3xl md:text-4xl font-bold animate-pulse">{startTimeLeft.seconds.toString().padStart(2, '0')}</div>
+                  <div className="text-xs font-light">Seconds</div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="text-center transform hover:scale-110 transition-transform duration-200">
+                  <div className="text-3xl md:text-4xl font-bold animate-pulse">{endTimeLeft.days.toString().padStart(2, '0')}</div>
+                  <div className="text-xs font-light">Days</div>
+                </div>
+                <div className="text-center transform hover:scale-110 transition-transform duration-200">
+                  <div className="text-3xl md:text-4xl font-bold animate-pulse">{endTimeLeft.hours.toString().padStart(2, '0')}</div>
+                  <div className="text-xs font-light">Hours</div>
+                </div>
+                <div className="text-center transform hover:scale-110 transition-transform duration-200">
+                  <div className="text-3xl md:text-4xl font-bold animate-pulse">{endTimeLeft.minutes.toString().padStart(2, '0')}</div>
+                  <div className="text-xs font-light">Minutes</div>
+                </div>
+                <div className="text-center transform hover:scale-110 transition-transform duration-200">
+                  <div className="text-3xl md:text-4xl font-bold animate-pulse">{endTimeLeft.seconds.toString().padStart(2, '0')}</div>
+                  <div className="text-xs font-light">Seconds</div>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
         {/* Latest Bid */}
-        <div className="bg-gradient-to-r from-white to-gray-50 p-5 rounded-xl mb-6 w-full max-w-md text-center shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-200">
+        <div className="bg-gradient-to-r from-white to-gray-50 p-5 rounded-xl mb-6 w-full max-w-md lg:max-w-2xl text-center shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-200">
           <p className="font-body text-black text-lg">Latest Bid: <span className="text-yellow font-bold text-xl animate-bounce">{latestBid} <FaCoins className="inline text-amber-400" /></span></p>
         </div>
 
         {/* Place a Bid Button */}
-        <button className="bg-gradient-to-r from-black to-gray-800 text-white py-4 px-8 rounded-xl font-heading text-xl w-full max-w-md mb-8 hover:from-gray-800 hover:to-black transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95">
+        <button className="bg-gradient-to-r from-black to-gray-800 text-white py-4 px-8 rounded-xl font-heading text-xl w-full max-w-md lg:max-w-2xl mb-8 hover:from-gray-800 hover:to-black transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95">
           🚀 Place a Bid
         </button>
 
               {/* Bidding Leaderboard */}
-              <div className="w-full max-w-md space-y-3">
+              <div className="w-full max-w-md lg:max-w-2xl space-y-3">
                 {bids.map((bid, index) => (
                   <div
                     key={index}
@@ -286,9 +256,7 @@ const AuctionPage: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+    </Sidebar>
   );
 };
 

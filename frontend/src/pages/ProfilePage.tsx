@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaCoins, FaShoppingCart, FaTrophy, FaHistory, FaBars, FaHome, FaGavel, FaCog, FaArrowLeft } from 'react-icons/fa';
+import Sidebar from '../components/Sidebar';
+import { FaUser, FaCoins, FaShoppingCart, FaTrophy, FaHistory, FaCog, FaHome, FaGavel } from 'react-icons/fa';
 
 interface User {
   id: string;
@@ -17,7 +18,9 @@ interface User {
 const ProfilePage = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Mock user data - in real app this would come from context/API
   const [user] = useState<User>({
@@ -36,6 +39,23 @@ const ProfilePage = () => {
     username: user.username,
     email: user.email
   });
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   const navigationItems = [
     { id: 'overview', name: 'Overview', icon: FaHome },
@@ -230,76 +250,85 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
-      <div className="flex h-screen">
-        {/* Desktop Sidebar */}
-        <div className={`w-64 bg-white shadow-lg fixed lg:static inset-y-0 left-0 z-40 transform ${
-          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 transition-transform duration-300 ease-in-out`}>
-          <div className="p-6">
-            <h1 className="text-2xl font-bold text-gray-800">Profile Dashboard</h1>
-            <p className="text-sm text-gray-600 mt-1">Manage your account</p>
-          </div>
-          <nav className="mt-6">
-            {/* Back to Main Site */}
-            <button
-              onClick={() => navigate('/')}
-              className="w-full text-left px-6 py-3 hover:bg-gray-50 transition-colors text-gray-900 border-b border-gray-200"
-            >
-              <FaArrowLeft className="inline mr-3" />
-              Back to PlayMarket
-            </button>
+    <Sidebar>
+      <div className="flex-1 overflow-auto p-4 lg:p-8">
+        <div className="max-w-6xl mx-auto">
+          {/* Profile Navigation Tabs */}
+          <div className="mb-6 bg-white rounded-lg shadow-md p-4">
+            {/* Desktop Tabs */}
+            <div className="hidden md:flex flex-wrap gap-2">
+              {navigationItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+                      activeTab === item.id
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    <Icon className="mr-2" />
+                    {item.name}
+                  </button>
+                );
+              })}
+            </div>
 
-            {/* Profile Navigation Items */}
-            {navigationItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`w-full text-left px-6 py-3 hover:bg-gray-50 transition-colors ${
-                    activeTab === item.id ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-900'
-                  }`}
-                >
-                  <Icon className="inline mr-3" />
-                  {item.name}
-                </button>
-              );
-            })}
-          </nav>
-        </div>
+            {/* Mobile Dropdown */}
+            <div className="md:hidden relative" ref={dropdownRef}>
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 flex items-center justify-between"
+              >
+                <div className="flex items-center">
+                  {(() => {
+                    const activeItem = navigationItems.find(item => item.id === activeTab);
+                    const Icon = activeItem?.icon;
+                    return (
+                      <>
+                        {Icon && <Icon className="mr-2 text-gray-600" />}
+                        <span className="text-gray-900 font-medium">{activeItem?.name || 'Select'}</span>
+                      </>
+                    );
+                  })()}
+                </div>
+                <span className={`transform transition-transform text-gray-500 ${isDropdownOpen ? 'rotate-180' : ''}`}>
+                  ▼
+                </span>
+              </button>
 
-        {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          <div
-            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-        )}
-
-        {/* Main Content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Mobile Header */}
-          <div className="lg:hidden flex items-center justify-between p-4 bg-white shadow-sm border-b border-gray-200">
-            <button
-              onClick={toggleMobileMenu}
-              className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-            >
-              <FaBars className="text-gray-600" />
-            </button>
-            <h1 className="text-lg font-semibold text-gray-900">Profile</h1>
-            <div className="w-10"></div> {/* Spacer for centering */}
-          </div>
-
-          {/* Content */}
-          <div className="flex-1 overflow-auto p-4 lg:p-8">
-            <div className="max-w-6xl mx-auto">
-              {renderTabContent()}
+              {isDropdownOpen && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                  {navigationItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          setActiveTab(item.id);
+                          setIsDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-3 flex items-center hover:bg-gray-50 transition-colors ${
+                          activeTab === item.id ? 'bg-blue-50 text-blue-700' : 'text-gray-700'
+                        } ${item.id === navigationItems[navigationItems.length - 1].id ? '' : 'border-b border-gray-100'}`}
+                      >
+                        <Icon className="mr-3" />
+                        <span>{item.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
+
+          {/* Profile Content */}
+          {renderTabContent()}
         </div>
       </div>
-    </div>
+    </Sidebar>
   );
 };
 
