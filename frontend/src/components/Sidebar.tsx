@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaCoins, FaBars, FaTimes, FaHome, FaGavel, FaGift, FaUser, FaSignInAlt } from 'react-icons/fa';
+import { FaCoins, FaBars, FaTimes, FaHome, FaGavel, FaGift, FaUser, FaSignOutAlt, FaShoppingCart } from 'react-icons/fa';
+import { FaWhatsapp, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -16,7 +17,6 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
     { id: 'bounties', name: 'Bounties', icon: FaGift, path: '/bounties' },
     { id: 'redeem', name: 'Redeem', icon: FaHome, path: '/redeem' },
     { id: 'profile', name: 'Profile', icon: FaUser, path: '/profile' },
-    { id: 'login', name: 'Login', icon: FaSignInAlt, path: '/login' },
   ];
 
   const currentPage = location.pathname === '/' ? 'auction' : location.pathname.slice(1);
@@ -26,39 +26,79 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
     setIsMobileMenuOpen(false);
   };
 
+  const handleSignOut = () => {
+    // Handle sign out logic here
+    navigate('/login');
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gray-50">
       <div className="flex h-screen">
         {/* Desktop Sidebar */}
-        <div className={`w-64 bg-white shadow-lg fixed lg:static inset-y-0 left-0 z-40 transform ${
+        <div className={`w-72 bg-white shadow-xl fixed lg:static inset-y-0 left-0 z-40 transform ${
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 transition-transform duration-300 ease-in-out`}>
-          <div className="p-6">
-            <div className="flex justify-center mb-4">
+        } lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col`}>
+          {/* Logo Section */}
+          <div className="p-8 pb-6">
+            <div className="flex justify-center">
               <img
                 src="/PM LOGO BLACK .png"
                 alt="PlayMarket Logo"
-                className="h-16"
+                className="h-16 w-auto"
               />
             </div>
           </div>
-          <nav className="mt-6">
-            {navigationItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavigation(item.path)}
-                  className={`w-full text-left px-6 py-3 hover:bg-gray-50 transition-colors ${
-                    currentPage === item.id ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-900'
-                  }`}
-                >
-                  <Icon className="inline mr-3" />
-                  {item.name}
-                </button>
-              );
-            })}
+
+          {/* Navigation Menu */}
+          <nav className="flex-1 px-6">
+            <div className="space-y-2">
+              {navigationItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = currentPage === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavigation(item.path)}
+                    className={`w-full text-center px-4 py-4 rounded-lg transition-all duration-200 font-medium text-lg ${
+                      isActive
+                        ? 'bg-red text-white'
+                        : 'text-red bg-white hover:bg-white hover:text-red-600'
+                    }`}
+                  >
+                    <Icon className="inline mr-4 text-xl" />
+                    {item.name}
+                  </button>
+                );
+              })}
+            </div>
           </nav>
+
+          {/* Sign Out Button */}
+          <div className="px-6 pb-6">
+            <button
+              onClick={handleSignOut}
+              className="w-full bg-red hover:bg-red-600 text-white font-semibold py-4 px-4 rounded-full transition-colors duration-200 text-lg shadow-md"
+            >
+              <FaSignOutAlt className="inline mr-3" />
+              Sign Out
+            </button>
+          </div>
+
+          {/* Social Icons */}
+          <div className="px-6 pb-8">
+            <div className="flex justify-center space-x-6">
+              <button className="p-3 text-red-500 hover:text-red-600 bg-black transition-colors duration-200 rounded-full hover:bg-red-50">
+                <FaWhatsapp className="text-2xl" />
+              </button>
+              <button className="p-3 text-red-500 hover:text-red-600 bg-black transition-colors duration-200 rounded-full hover:bg-red-50">
+                <FaTwitter className="text-2xl" />
+              </button>
+              <button className="p-3 text-red-500 hover:text-red-600 bg-black transition-colors duration-200 rounded-full hover:bg-red-50">
+                <FaInstagram className="text-2xl" />
+              </button>
+              
+            </div>
+          </div>
         </div>
 
         {/* Mobile Menu Overlay */}
