@@ -59,10 +59,10 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   <button
                     key={item.id}
                     onClick={() => handleNavigation(item.path)}
-                    className={`w-full text-left px-4 py-4 rounded-lg transition-all duration-200 font-medium text-lg ${
+                    className={`w-full text-center px-4 py-4 rounded-lg transition-all duration-200 font-medium text-lg ${
                       isActive
-                        ? 'bg-red-50 text-red-600'
-                        : 'text-red-500 hover:bg-red-50 hover:text-red-600'
+                        ? 'bg-red text-white'
+                        : 'text-red bg-white hover:bg-red-50 hover:text-red-600'
                     }`}
                   >
                     <Icon className="inline mr-4 text-xl" />
@@ -77,7 +77,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           <div className="px-6 pb-6">
             <button
               onClick={handleSignOut}
-              className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-4 px-4 rounded-full transition-colors duration-200 text-lg shadow-md"
+              className="w-full bg-red hover:bg-red-600 text-white font-semibold py-4 px-4 rounded-full transition-colors duration-200 text-lg shadow-md"
             >
               <FaSignOutAlt className="inline mr-3" />
               Sign Out
@@ -87,13 +87,13 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           {/* Social Icons */}
           <div className="px-6 pb-8">
             <div className="flex justify-center space-x-6">
-              <button className="p-3 text-red-500 hover:text-red-600 transition-colors duration-200 rounded-full hover:bg-red-50">
+              <button className="p-3 text-red-500 hover:text-red-600 bg-black transition-colors duration-200 rounded-full hover:bg-red-50">
                 <FaWhatsapp className="text-2xl" />
               </button>
-              <button className="p-3 text-red-500 hover:text-red-600 transition-colors duration-200 rounded-full hover:bg-red-50">
+              <button className="p-3 text-red-500 hover:text-red-600 bg-black transition-colors duration-200 rounded-full hover:bg-red-50">
                 <FaTwitter className="text-2xl" />
               </button>
-              <button className="p-3 text-red-500 hover:text-red-600 transition-colors duration-200 rounded-full hover:bg-red-50">
+              <button className="p-3 text-red-500 hover:text-red-600 bg-black transition-colors duration-200 rounded-full hover:bg-red-50">
                 <FaInstagram className="text-2xl" />
               </button>
             </div>
