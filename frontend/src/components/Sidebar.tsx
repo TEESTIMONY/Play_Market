@@ -45,6 +45,9 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                 src="/PM LOGO BLACK .png"
                 alt="PlayMarket Logo"
                 className="h-16 w-auto"
+                loading="eager"
+                width="64"
+                height="64"
               />
             </div>
           </div>
@@ -127,8 +130,9 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               <img
                 src="/PM LOGO BLACK .png"
                 alt="PlayMarket Logo"
-                className="h-10 hover:scale-105 transition-transform duration-200 cursor-pointer"
+                className="h-10 w-auto hover:scale-105 transition-transform duration-200 cursor-pointer"
                 onClick={() => handleNavigation('/')}
+                loading="eager"
               />
             </div>
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaCoins } from 'react-icons/fa';
 import Sidebar from '../components/Sidebar';
 
 const BountiesPage: React.FC = () => {
@@ -92,13 +93,13 @@ const BountiesPage: React.FC = () => {
   const getStatusBadge = (bounty: any) => {
     if (bounty.status === 'available' && bounty.claimsLeft > 0) {
       return (
-        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+        <span className="bg-green text-white text-xs px-2 py-1 rounded-full">
           {bounty.claimsLeft} Claims Left
         </span>
       );
     } else if (bounty.status === 'available' && bounty.expiresIn) {
       return (
-        <span className="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
+        <span className="bg-yellow text-white text-xs px-2 py-1 rounded-full">
           Expires in {bounty.expiresIn} hours
         </span>
       );
@@ -174,7 +175,8 @@ const BountiesPage: React.FC = () => {
                 {/* Bounty Title and Reward */}
                 <div className="flex items-center justify-between mb-6 animate-slide-in" style={{ animationDelay: '0.1s' }}>
                   <h1 className="font-heading text-3xl text-black hover:text-blue-600 transition-colors duration-300">{selectedBounty.title}</h1>
-                  <div className="flex items-center bg-gradient-to-r from-yellow-100 to-yellow-200 px-4 py-2 rounded-xl shadow-md animate-bounce">
+                  <div className="flex items-center bg-gradient-to-r from-yellow-100 to-yellow-200 px-4 py-2 rounded-xl shadow-md">
+                    <FaCoins className="text-amber-400 mr-2" />
                     <span className="font-bold text-2xl text-black">{selectedBounty.reward}</span>
                   </div>
                 </div>
@@ -205,7 +207,7 @@ const BountiesPage: React.FC = () => {
                     onClick={handleSubmit}
                     className="mt-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-8 rounded-xl font-heading text-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 hover:shadow-xl transition-all duration-300 shadow-lg active:scale-95"
                   >
-                    🚀 SUBMIT
+                    SUBMIT
                   </button>
                 </div>
               </div>
@@ -237,7 +239,7 @@ const BountiesPage: React.FC = () => {
               {bounties.map((bounty, index) => (
                 <div
                   key={bounty.id}
-                  className="bg-white rounded-xl shadow-lg hover:bg-red-100 hover:shadow-2xl hover:border-blue-300 transition-all duration-300 p-6 border border-gray-200 relative animate-slide-in hover:scale-102"
+                  className="bg-white rounded-xl shadow-lg hover:bg-red-100 hover:shadow-2xl hover:border-blue-300 transition-all duration-300 p-3 border border-gray-200 relative animate-slide-in hover:scale-102"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   {/* Posted Time */}
@@ -245,12 +247,6 @@ const BountiesPage: React.FC = () => {
                     {bounty.postedHoursAgo}hrs ago
                   </div>
 
-                  {/* Claims Left */}
-                  {bounty.claimsLeft !== null && bounty.claimsLeft > 0 && (
-                    <div className="absolute bottom-3 right-3 text-xs text-gray-500 font-semibold uppercase">
-                      {bounty.claimsLeft} CLAIMS LEFT
-                    </div>
-                  )}
 
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
@@ -258,6 +254,7 @@ const BountiesPage: React.FC = () => {
                       <p className="font-body text-gray-600 mb-3">{bounty.description}</p>
                       <div className="flex items-center gap-4">
                         <div className="flex items-center">
+                          <FaCoins className="inline text-amber-400 mr-1" />
                           <span className="font-bold text-lg text-black">{bounty.reward}</span>
                         </div>
                         {getStatusBadge(bounty)}
@@ -295,7 +292,7 @@ const BountiesPage: React.FC = () => {
             {/* Close Button */}
             <button
               onClick={() => setShowSuccessModal(false)}
-              className="bg-yellow text-white py-3 px-8 rounded-xl font-heading text-lg hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95"
+              className="bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-8 rounded-xl font-heading text-lg hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95"
             >
               Continue
             </button>

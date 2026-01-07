@@ -19,11 +19,11 @@ const AuctionManagement = forwardRef((_props, ref) => {
     openModal: () => setShowModal(true)
   }));
 
-  // Auto-rotate images
+  // Optimized auto-rotate images with reduced frequency
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % auctionData.images.length);
-    }, 3000); // Change image every 3 seconds
+    }, 6000); // Change image every 6 seconds for better performance
 
     return () => clearInterval(interval);
   }, [auctionData.images.length]);
@@ -120,6 +120,7 @@ const AuctionManagement = forwardRef((_props, ref) => {
                 key={index}
                 src={image}
                 alt={`Auction ${index + 1}`}
+                loading="lazy"
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
                   index === currentImageIndex ? 'opacity-100' : 'opacity-0'
                 }`}

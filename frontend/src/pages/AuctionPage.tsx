@@ -96,11 +96,11 @@ const AuctionPage: React.FC = () => {
     return () => clearInterval(timer);
   }, [auctionPhase]);
 
-  // Slideshow effect
+  // Optimized slideshow effect with reduced frequency
   useEffect(() => {
     const slideshowTimer = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 3000); // Change image every 3 seconds
+    }, 5000); // Change image every 5 seconds for better performance
 
     return () => clearInterval(slideshowTimer);
   }, [images.length]);
@@ -127,7 +127,7 @@ const AuctionPage: React.FC = () => {
                 </div>
                 <button
                   onClick={() => navigate('/bounties')}
-                  className="bg-white text-green px-4 py-1 rounded-20% font-heading text-xs font-light hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg"
+                  className="bg-white text-green px-4 py-1 rounded-20% font-heading text-xs font-light hover:bg-gray-100 transition-colors duration-200 shadow-lg"
                 >
                   GO NOW {'>'}
                 </button>
@@ -144,6 +144,7 @@ const AuctionPage: React.FC = () => {
                 key={index}
                 src={image}
                 alt={`ST Rina ${index + 1}`}
+                loading="lazy"
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
                   index === currentImageIndex ? 'opacity-100' : 'opacity-0'
                 }`}
@@ -169,8 +170,8 @@ const AuctionPage: React.FC = () => {
         </div>
 
         {/* Title and Description */}
-        <h1 className="font-heading text-2xl md:text-4xl text-black mb-2 text-center">{auctionTitle}</h1>
-        <p className="font-body font-thin text-black mb-4 text-center">{auctionDescription}</p>
+        <h1 className="font-heading text-2xl md:text-4xl text-black mb-2 text-center" style={{ fontFamily: "'Eras Bold ITC', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif" }}>{auctionTitle}</h1>
+        <p className="font-body font-thin text-black mb-4 text-center" style={{ fontFamily: "'Eras Demi ITC', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif" }}>{auctionDescription}</p>
 
         {/* Timer */}
         <div className="bg-gradient-to-r from-black to-gray-900 text-white p-6 rounded-xl mb-6 w-full max-w-md lg:max-w-2xl shadow-2xl animate-fade-in relative">
