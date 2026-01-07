@@ -72,14 +72,14 @@ const AuctionManagement = forwardRef((_props, ref) => {
                            auctionData.endDuration.minutes;
 
     if (startTotalMinutes >= endTotalMinutes) {
-      alert('Error: Auction start time must be before the end time!');
+      // alert('Error: Auction start time must be before the end time!');
       return;
     }
 
     // TODO: Save to backend
     console.log('Saving auction data:', auctionData);
     setShowModal(false);
-    alert('Auction settings saved successfully!');
+    // alert('Auction settings saved successfully!');
   };
 
   return (

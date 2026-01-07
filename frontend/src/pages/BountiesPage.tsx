@@ -4,6 +4,7 @@ import Sidebar from '../components/Sidebar';
 const BountiesPage: React.FC = () => {
   const [selectedBounty, setSelectedBounty] = useState<any>(null);
   const [submission, setSubmission] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const bounties = [
     {
@@ -122,7 +123,8 @@ const BountiesPage: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    alert(`Submission for ${selectedBounty.title}: ${submission}`);
+    // Show success modal instead of alert
+    setShowSuccessModal(true);
     setSelectedBounty(null);
     setSubmission('');
   };
@@ -215,61 +217,92 @@ const BountiesPage: React.FC = () => {
   }
 
   return (
-    <Sidebar>
-      <div className="flex-1 overflow-auto">
-        {/* Campaign Banner */}
-        <div className="bg-red text-white py-2 px-4 shadow-lg animate-pulse border-2 border-red-700">
-          <div className="flex items-center justify-center max-w-6xl mx-auto">
-            <div className="text-center">
-              <p className="font-heading text-sm font-bold">Complete Tasks & Earn Up to 200 Coins!</p>
-              <p className="font-body text-xs opacity-90 mt-1">Start earning now - your rewards await!</p>
+    <>
+      <Sidebar>
+        <div className="flex-1 overflow-auto">
+          {/* Campaign Banner */}
+          <div className="bg-red text-white py-2 px-4 shadow-lg animate-pulse border-2 border-red-700">
+            <div className="flex items-center justify-center max-w-6xl mx-auto">
+              <div className="text-center">
+                <p className="font-heading text-sm font-bold">Complete Tasks & Earn Up to 200 Coins!</p>
+                <p className="font-body text-xs opacity-90 mt-1">Start earning now - your rewards await!</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bounties Section */}
+          <div className="p-4 md:p-8">
+            <h1 className="font-heading text-3xl text-black mb-6 text-left animate-fade-in">Bounties</h1>
+            <div className="max-w-4xl mx-auto space-y-4">
+              {bounties.map((bounty, index) => (
+                <div
+                  key={bounty.id}
+                  className="bg-white rounded-xl shadow-lg hover:bg-red-100 hover:shadow-2xl hover:border-blue-300 transition-all duration-300 p-6 border border-gray-200 relative animate-slide-in hover:scale-102"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  {/* Posted Time */}
+                  <div className="absolute top-3 right-3 text-xs text-gray-400">
+                    {bounty.postedHoursAgo}hrs ago
+                  </div>
+
+                  {/* Claims Left */}
+                  {bounty.claimsLeft !== null && bounty.claimsLeft > 0 && (
+                    <div className="absolute bottom-3 right-3 text-xs text-gray-500 font-semibold uppercase">
+                      {bounty.claimsLeft} CLAIMS LEFT
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h3 className="font-heading text-xl text-black mb-2">{bounty.title}</h3>
+                      <p className="font-body text-gray-600 mb-3">{bounty.description}</p>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center">
+                          <span className="font-bold text-lg text-black">{bounty.reward}</span>
+                        </div>
+                        {getStatusBadge(bounty)}
+                      </div>
+                    </div>
+                    <div className="ml-4">
+                      {getClaimButton(bounty)}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
+      </Sidebar>
 
-        {/* Bounties Section */}
-        <div className="p-4 md:p-8">
-          <h1 className="font-heading text-3xl text-black mb-6 text-left animate-fade-in">Bounties</h1>
-          <div className="max-w-4xl mx-auto space-y-4">
-            {bounties.map((bounty, index) => (
-              <div
-                key={bounty.id}
-                className="bg-white rounded-xl shadow-lg hover:bg-red-100 hover:shadow-2xl hover:border-blue-300 transition-all duration-300 p-6 border border-gray-200 relative animate-slide-in hover:scale-102"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {/* Posted Time */}
-                <div className="absolute top-3 right-3 text-xs text-gray-400">
-                  {bounty.postedHoursAgo}hrs ago
-                </div>
-
-                {/* Claims Left */}
-                {bounty.claimsLeft !== null && bounty.claimsLeft > 0 && (
-                  <div className="absolute bottom-3 right-3 text-xs text-gray-500 font-semibold uppercase">
-                    {bounty.claimsLeft} CLAIMS LEFT
-                  </div>
-                )}
-
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-heading text-xl text-black mb-2">{bounty.title}</h3>
-                    <p className="font-body text-gray-600 mb-3">{bounty.description}</p>
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center">
-                        <span className="font-bold text-lg text-black">{bounty.reward}</span>
-                      </div>
-                      {getStatusBadge(bounty)}
-                    </div>
-                  </div>
-                  <div className="ml-4">
-                    {getClaimButton(bounty)}
-                  </div>
-                </div>
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 animate-scale-in text-center">
+            {/* Big Green Checkmark */}
+            <div className="mb-6">
+              <div className="w-24 h-24 bg-green rounded-full flex items-center justify-center mx-auto animate-bounce shadow-lg">
+                <span className="text-4xl text-white font-bold">✓</span>
               </div>
-            ))}
+            </div>
+
+            {/* Success Text */}
+            <h2 className="text-2xl font-bold text-gray-800 mb-2 font-heading">Submission Successful!</h2>
+            <p className="text-gray-600 mb-6 font-body">
+              Your bounty submission has been received and is now under review.
+              You'll be notified once it's approved.
+            </p>
+
+            {/* Close Button */}
+            <button
+              onClick={() => setShowSuccessModal(false)}
+              className="bg-yellow text-white py-3 px-8 rounded-xl font-heading text-lg hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95"
+            >
+              Continue
+            </button>
           </div>
         </div>
-      </div>
-    </Sidebar>
+      )}
+    </>
   );
 };
 

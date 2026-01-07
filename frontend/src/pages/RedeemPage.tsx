@@ -6,7 +6,6 @@ const RedeemPage: React.FC = () => {
 
   const handleSubmit = () => {
     // Handle redeem logic here
-    alert(`Redeeming code: ${redeemCode}`);
   };
 
   return (
